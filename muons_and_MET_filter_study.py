@@ -119,7 +119,7 @@ efficiencies(events,triggerSingleMuon)
 
 
 testcut=events.Muon_pt > 10
-events[events.Muon_pt]
+events[testcut]
 
 
 # In[ ]:
