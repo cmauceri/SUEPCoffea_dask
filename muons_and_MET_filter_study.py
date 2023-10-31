@@ -41,26 +41,17 @@ def efficiencies(evs,trigger):
     effs=np.zeros(int(max_pt/pt_bin))
     #  fill efficiencies in bins of pT
     for cut in range(20):
-        cut_pt=(evs.Muon_pt) > (cut*pt_bin) #& (evs.Muon_pt < (cut*pt_bin + pt_bin))
-        #print(cut_pt)
+        cut_pt=((evs) > (cut*pt_bin)) & ((evs) < (cut*pt_bin + pt_bin))
         cut_sig=evs[cut_pt]
         cut_tr=evs[trigger & cut_pt]
-        #print(len(cut_tr))
-        #print(cut_sig)
-        effs[cut]=len(cut_tr)/len(cut_sig)
+        num_cut_tr=ak.count_nonzero(cut_tr)
+        num_cut_sig=ak.count_nonzero(cut_sig)
+        if num_cut_sig==0:
+            effs[cut]=0
+        else:    
+            effs[cut]=num_cut_tr/num_cut_sig
     return effs
-signal=events.Muon_pt
-efficiencies(events,triggerSingleMuon)
 
-# Debugging:
-testcut=events.Muon_pt > 10
-print(testcut)
-#len(testcut)
-nwcut=[]
-# Maybe it doesn't work to feed in []
-for test_entry in testcut:
-    if (len(test_entry)) == 0:
-        nwcut.append([False])
-    else:
-        nwcut.append(test_entry)
-nwcut=ak.Array(nwcut)
+signal=events.Muon_pt
+efficiencies(signal,triggerSingleMuon)
+
