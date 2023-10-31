@@ -51,3 +51,16 @@ def efficiencies(evs,trigger):
     return effs
 signal=events.Muon_pt
 efficiencies(events,triggerSingleMuon)
+
+# Debugging:
+testcut=events.Muon_pt > 10
+print(testcut)
+#len(testcut)
+nwcut=[]
+# Maybe it doesn't work to feed in []
+for test_entry in testcut:
+    if (len(test_entry)) == 0:
+        nwcut.append([False])
+    else:
+        nwcut.append(test_entry)
+nwcut=ak.Array(nwcut)
